@@ -6,8 +6,8 @@ PollScraper
 .. .. image:: https://img.shields.io/pypi/v/pollscraper.svg
 ..         :target: https://pypi.python.org/pypi/pollscraper
 
-.. image:: https://img.shields.io/travis/AEJaspan/pollscraper.svg
-        :target: https://travis-ci.com/AEJaspan/pollscraper
+.. image:: https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml/badge.svg
+        :target: https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml
 
 .. image:: https://readthedocs.org/projects/pollscraper/badge/?version=latest
         :target: https://pollscraper.readthedocs.io/en/latest/?version=latest
