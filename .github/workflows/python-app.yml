@@ -55,3 +55,20 @@ jobs:
       run: |
         make docs
         make servedocs
+        
+  archive-build-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Step 1 - Create a temporary artifact downloads folder
+        run: mkdir downloads
+        
+      - name: step 2 - Add artifacts to publish to the temp folder
+        run: |
+          cp data/data.csv downloads/
+    
+      - name: Step 3 - Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with: 
+          name: assets-for-download
+          path: downloads
