@@ -1,0 +1,57 @@
+===========
+PollScraper
+===========
+
+
+.. image:: https://img.shields.io/pypi/v/pollscraper.svg
+        :target: https://pypi.python.org/pypi/pollscraper
+
+.. image:: https://img.shields.io/travis/AEJaspan/pollscraper.svg
+        :target: https://travis-ci.com/AEJaspan/pollscraper
+
+.. image:: https://readthedocs.org/projects/pollscraper/badge/?version=latest
+        :target: https://pollscraper.readthedocs.io/en/latest/?version=latest
+        :alt: Documentation Status
+
+
+
+
+A production-ready web scraping utility, built to monitor polling data hosted by the Economist data team.
+
+
+Setup
+--------
+
+```
+python3.7 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements_dev.txt
+```
+
+Building documentation
+-----------------------
+
+
+```
+cd docs
+make html
+```
+
+
+
+* Free software: MIT license
+* Documentation: https://pollscraper.readthedocs.io.
+
+
+Features
+--------
+
+* TODO
+
+Credits
+-------
+
+This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
