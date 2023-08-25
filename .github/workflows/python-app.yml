@@ -41,3 +41,8 @@ jobs:
         make lint
         make test
         pytest
+
+    - name: MakeDocs
+      run: |
+        make docs
+        make servedocs
