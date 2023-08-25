@@ -3,8 +3,8 @@ PollScraper
 ===========
 
 
-.. image:: https://img.shields.io/pypi/v/pollscraper.svg
-        :target: https://pypi.python.org/pypi/pollscraper
+.. .. image:: https://img.shields.io/pypi/v/pollscraper.svg
+..         :target: https://pypi.python.org/pypi/pollscraper
 
 .. image:: https://img.shields.io/travis/AEJaspan/pollscraper.svg
         :target: https://travis-ci.com/AEJaspan/pollscraper
@@ -22,21 +22,40 @@ A production-ready web scraping utility, built to monitor polling data hosted by
 Setup
 --------
 
+.. code-block:: console
+        $ python3.7 -m venv .venv
+        $ source .venv/bin/activate
+        $ pip install -r requirements_dev.txt
+        $ python setup.py install
+
+
+Testing
+--------
+
+.. code-block:: console
+        $ flake8 pollscraper tests
+        $ python setup.py test
+        $ python -m unittest tests.test_pollscraper
+
 ```
-python3.7 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements_dev.txt
-```
+
 
 Building documentation
 -----------------------
 
+.. code-block:: console
+        $ cd docs
+        $ make html
 
-```
-cd docs
-make html
-```
 
+Deployment
+------------
+
+.. code-block:: console
+        $ python -m unittest tests.test_pollscraper
+        $ bump2version patch # possible: major / minor / patch
+        $ git push
+        $ git push --tags
 
 
 * Free software: MIT license
