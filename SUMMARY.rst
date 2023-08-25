@@ -4,8 +4,7 @@ Economist Task
 
 
 Summary 
--------
-
+~~~~~~~~~~~~~
 
 The polling page contains a list of polls from a presidential election in a hypothetical country.
 The election will be held on the 10th of October, 2024.
@@ -32,13 +31,16 @@ The poll tracker page will add more polls over time.
 
 
 Requirements 
--------------
+~~~~~~~~~~~~~
+
+
+
 The structure of the table will never change, and its design is pretty simple.
 The code base should provide error monitoring, and will detect or alert the user in the event of a major error. 
 
 
 Results
------------
+~~~~~~~~~~~~~
 
 This script should output two CSVs, called polls.csv and trends.csv (for the averages).
 The polls file should have columns for date, pollster, n (sample size), and each candidate (by name); the trends file just date and a column for each candidate.

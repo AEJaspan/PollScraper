@@ -6,7 +6,7 @@ Welcome to PollScraper's documentation!
    :caption: Contents:
 
    readme
-   task-summary
+   task
    installation
    usage
    modules
