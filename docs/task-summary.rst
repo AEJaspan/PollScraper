@@ -39,4 +39,4 @@ This script should output two CSVs, called polls.csv and trends.csv (for the ave
 The polls file should have columns for date, pollster, n (sample size), and each candidate (by name); the trends file just date and a column for each candidate.
 Values for polls and trends should be a number from 0 to 1.
 The polls file should have a row for each poll. The trends file should have a row for each day, starting with October 11th, 2023.
-Examples are shown in the `data/polls.example.csv` and `data/trends.example.csv` files.
+Examples are shown in the ``data/polls.example.csv`` and ``data/trends.example.csv`` files.

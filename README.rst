@@ -23,6 +23,7 @@ Setup
 --------
 
 .. code-block:: console
+
         $ python3.7 -m venv .venv
         $ source .venv/bin/activate
         $ pip install -r requirements_dev.txt
@@ -33,26 +34,25 @@ Testing
 --------
 
 .. code-block:: console
-        $ flake8 pollscraper tests
-        $ python setup.py test
-        $ python -m unittest tests.test_pollscraper
 
-```
+        $ make lint
+        $ make test-all
+
 
 
 Building documentation
 -----------------------
 
 .. code-block:: console
-        $ cd docs
-        $ make html
+
+        $ make docs
 
 
 Deployment
 ------------
 
 .. code-block:: console
-        $ python -m unittest tests.test_pollscraper
+
         $ bump2version patch # possible: major / minor / patch
         $ git push
         $ git push --tags

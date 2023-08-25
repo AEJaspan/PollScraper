@@ -112,7 +112,7 @@ Tips
 To run a subset of tests::
 
 
-    $ python -m unittest tests.test_pollscraper
+    $ pytest tests/test_pollscraper
 
 Deploying
 ---------

@@ -3,7 +3,7 @@
 pip==19.2.3
 bump2version==0.5.11
 wheel==0.33.6
-watchdog==0.9.0
+watchdog==2.0
 flake8==3.7.8
 tox==3.14.0
 coverage==4.5.4
@@ -12,3 +12,13 @@ twine==1.14.0
 Click==7.1.2
 
 
+mkdocs==1.2.3
+jinja2==3.0.0
+urllib3==1.26.6
+
+
+beautifulsoup4==4.12.2
+numpy==1.21.6
+pandas==1.1.5
+urlpath==1.2.0
+lxml==4.9.3

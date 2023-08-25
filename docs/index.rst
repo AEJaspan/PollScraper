@@ -1,5 +1,5 @@
 Welcome to PollScraper's documentation!
-======================================
+==========================================
 
 .. toctree::
    :maxdepth: 2
