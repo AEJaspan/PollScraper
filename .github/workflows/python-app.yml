@@ -42,6 +42,15 @@ jobs:
         make test
         pytest
 
+    - name: Make Docs
+      run: |
+        make docs
+        make servedocs
+
+    - name: Scrape Polls
+      run: |
+        pollscraper --debug 10 --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results data/data.csv
+
     - name: MakeDocs
       run: |
         make docs
