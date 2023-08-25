@@ -58,16 +58,17 @@ jobs:
         
   archive-build-artifacts:
     runs-on: ubuntu-latest
+    needs: build
     steps:
 
-      - name: Step 1 - Create a temporary artifact downloads folder
+      - name: Create temp artifact folder
         run: mkdir downloads
         
-      - name: step 2 - Add artifacts to publish to the temp folder
+      - name: Add artifacts to be published
         run: |
           cp data/data.csv downloads/
     
-      - name: Step 3 - Use the Upload Artifact GitHub Action
+      - name: Upload Artifact GitHub Action
         uses: actions/upload-artifact@v2
         with: 
           name: assets-for-download
