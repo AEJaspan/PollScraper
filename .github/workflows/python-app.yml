@@ -37,6 +37,7 @@ jobs:
     #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     # make lint
     - name: Test 
+      uses: actions/checkout@main
       run: |
         python setup.py test
         flake8 pollscraper tests
@@ -44,10 +45,12 @@ jobs:
         pytest
 
     - name: Scrape Polls
+      uses: actions/checkout@main
       run: |
         pollscraper --debug 10 --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results data/data.csv
 
     - name: MakeDocs
+      uses: actions/checkout@main
       run: |
         make docs
         make servedocs
