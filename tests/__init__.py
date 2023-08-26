@@ -1,1 +1,1 @@
-"""Unit test package for pollscraper."""
+"""Test package for pollscraper."""

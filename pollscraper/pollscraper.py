@@ -10,7 +10,8 @@ class DataPipeline:
     """
     DataPipeline class for processing and transforming data.
 
-    This class provides methods to load data from a source, transform it, and save it to a destination.
+    This class provides methods to load data from a source,
+    transform it, and save it to a destination.
 
     Attributes:
         source (str): The path to the source file.
@@ -25,11 +26,12 @@ class DataPipeline:
         self.logger = logging.getLogger(__name__)
         # Set the log level and other configurations for the logger
         self.logger.setLevel(LOGGING_LEVEL)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging\
+            .Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(formatter)
         self.logger.addHandler(stream_handler)
-        self.logger.debug(f"Data Pipeline Initialised.")
+        self.logger.debug("Data Pipeline Initialised.")
 
     def fetch_html_content(self, url):
         """
@@ -39,13 +41,15 @@ class DataPipeline:
             url (str): The URL to fetch the HTML from.
 
         Returns:
-            requests.Response: The HTTP response object containing the HTML content.
+            requests.Response: The HTTP response object containing
+            the HTML content.
         """
-        self.logger.debug(f"Attempting to fetch HTML content.")
+        self.logger.debug("Attempting to fetch HTML content.")
         try:
             headers = {'Accept-Encoding': 'identity'}
             response = requests.get(url, headers=headers)
-            response.raise_for_status()  # Raise exception for 4xx and 5xx status codes
+            response.raise_for_status()
+            # Raise exception for 4xx and 5xx status codes
             return response
         except requests.exceptions.RequestException as e:
             self.logger.error(f'Error fetching HTML: {e}')
@@ -61,10 +65,13 @@ class DataPipeline:
         Returns:
             list: A list of lists containing the table data.
         """
-        self.logger.debug(f"Attempting to extract HTML content.")
+        self.logger.debug("Attempting to extract HTML content.")
         table_data = []
         for row in table.find_all('tr'):
-            row_data = [cell.get_text(strip=True) for cell in row.find_all(['th', 'td'])]
+            row_data = [
+                cell.get_text(strip=True) for cell in row
+                    .find_all(['th', 'td'])
+                ]
             table_data.append(row_data)
         return table_data
 
@@ -76,14 +83,16 @@ class DataPipeline:
             html_content (str): The HTML content as a string.
 
         Returns:
-            list or list of lists: A list of tables as DataFrames if found, otherwise a list of list of lists.
+            list or list of lists: A list of tables as DataFrames
+            if found, otherwise a list of list of lists.
         """
-        self.logger.debug(f"Attempting to parse HTML content.")
+        self.logger.debug("Attempting to parse HTML content.")
         try:
             raise ValueError
             return pd.read_html(html_content)
         except ValueError as ve:
-            self.logger.warning(f'Pandas failed to read html content with error {ve}')
+            self.logger\
+                .warning(f'Pandas failed to read html content with error {ve}')
             self.logger.info('Falling back to bs4.')
             soup = BeautifulSoup(html_content, 'html.parser')
             tables = soup.find_all('table')
@@ -108,11 +117,16 @@ class DataPipeline:
         Returns:
             list of dict: A list of dictionaries containing the extracted data.
         """
-        self.logger.debug(f"Attempting to parse XML content.")
+        self.logger.debug("Attempting to parse XML content.")
         try:
+            if 'read_xml' not in pd.__dict__:
+                raise AttributeError(
+                    f"""Read XML method only available in pandas>=1.3.0.
+                    (Python>=3.7.1) Current pandas=={pd.__version__}.""")
             return pd.read_xml(xml_content)
-        except ValueError as ve:
-            self.logger.warning(f'Pandas failed to read xml content with error {ve}')
+        except (ValueError, AttributeError) as e:
+            self.logger\
+                .warning(f'Pandas failed to read xml content with error {e}')
             self.logger.info('Falling back to bs4.')
             soup = BeautifulSoup(xml_content, 'xml')
             data_elements = soup.find_all('Keyword')
@@ -125,7 +139,7 @@ class DataPipeline:
                     'Definition': element.find('Definition').get_text()
                 }
                 data_list.append(data)
-            return data_list
+            return pd.DataFrame(data_list)
         except Exception as e:
             self.logger.error(f"Error extracting data from XML: {e}")
             return None
@@ -140,7 +154,7 @@ class DataPipeline:
         Returns:
             pandas.DataFrame: The DataFrame containing the CSV data.
         """
-        self.logger.debug(f"Attempting to parse CSV content.")
+        self.logger.debug("Attempting to parse CSV content.")
         return pd.read_csv(url)
 
     def extract_table_data(self, url):
@@ -151,7 +165,8 @@ class DataPipeline:
             url (str): The URL to fetch and extract data from.
 
         Returns:
-            list or pandas.DataFrame: A list of lists if table data is found, or DataFrame if CSV data is found.
+            list or pandas.DataFrame: A list of lists if table
+            data is found, or DataFrame if CSV data is found.
         """
         self.logger.debug(f"Attempting to access content from {url}.")
         url = URL(url)
@@ -176,10 +191,12 @@ class DataPipeline:
         Returns:
             pandas.DataFrame: The processed DataFrame.
         """
-        self.logger.debug(f"Processing parsed data.")
+        self.logger.debug("Processing parsed data.")
         if isinstance(table_data, list):
             # Process list of lists
-            processed_data = pd.DataFrame(table_data[1:], columns=table_data[0])
+            processed_data = pd.DataFrame(
+                    table_data[1:], columns=table_data[0]
+                )
         elif isinstance(table_data, pd.DataFrame):
             # Process DataFrame
             processed_data = table_data
@@ -206,6 +223,7 @@ class DataPipeline:
             logging.error(f"Error saving data to CSV: {e}")
             raise
 
+
 def main():
     url = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
     file_path = 'data/data.csv'
@@ -213,6 +231,7 @@ def main():
     table_data = dp.extract_table_data(url)
     processed_data = dp.process_data(table_data)
     dp.save_to_csv(processed_data, file_path)
+
 
 if __name__ == "__main__":
     main()
