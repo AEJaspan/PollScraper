@@ -19,7 +19,7 @@ PollScraper
 A production-ready web scraping utility, built to monitor polling data hosted by the Economist data team.
 
 
-Artifacts from the latest build can be downloaded in the `Actions tab <https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml>`.
+Artifacts from the latest build can be downloaded in the `Actions tab <https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml>`_.
 
 
 Setup
