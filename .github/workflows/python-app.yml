@@ -50,7 +50,7 @@ jobs:
     - name: MakeDocs
       run: |
         make docs
-        make servedocs
+      # make servedocs
         
   archive-build-artifacts:
     runs-on: ubuntu-latest
