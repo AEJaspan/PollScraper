@@ -47,12 +47,6 @@ jobs:
       run: |
         make docs
       # make servedocs
-        
-  archive-build-artifacts:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-
 
       - name: Scrape Polls
         run: |
