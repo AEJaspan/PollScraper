@@ -93,7 +93,7 @@ class DataPipeline:
         except ValueError as ve:
             self.logger\
                 .warning(f'Pandas failed to read html content with error {ve}')
-            self.logger.info('Falling back to bs4.')
+            self.logger.info('Falling back to BeautifulSoup.')
             soup = BeautifulSoup(html_content, 'html.parser')
             tables = soup.find_all('table')
             if not tables:
@@ -127,7 +127,7 @@ class DataPipeline:
         except (ValueError, AttributeError) as e:
             self.logger\
                 .warning(f'Pandas failed to read xml content with error {e}')
-            self.logger.info('Falling back to bs4.')
+            self.logger.info('Falling back to BeautifulSoup.')
             soup = BeautifulSoup(xml_content, 'xml')
             data_elements = soup.find_all('Keyword')
 
