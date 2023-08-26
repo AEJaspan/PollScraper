@@ -43,29 +43,24 @@ jobs:
         make test
         pytest
 
+    - name: MakeDocs
+      run: |
+        make docs
+      # make servedocs
+
     - name: Scrape Polls
       run: |
         pollscraper --debug 10 --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results data/data.csv
 
-    - name: MakeDocs
+    - name: Create temp artifact folder
+      run: mkdir downloads
+      
+    - name: Add artifacts to be published
       run: |
-        make docs
-        make servedocs
-        
-  archive-build-artifacts:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-
-      - name: Create temp artifact folder
-        run: mkdir downloads
-        
-      - name: Add artifacts to be published
-        run: |
-          cp data/data.csv downloads/
-    
-      - name: Upload Artifact GitHub Action
-        uses: actions/upload-artifact@v2
-        with: 
-          name: assets-for-download
-          path: downloads
+        cp data/data.csv downloads/
+  
+    - name: Upload Artifact GitHub Action
+      uses: actions/upload-artifact@v2
+      with: 
+        name: assets-for-download
+        path: downloads
