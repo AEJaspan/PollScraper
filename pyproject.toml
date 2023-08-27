@@ -1,0 +1,44 @@
+[build-system]
+requires = ["pdm-backend", "setuptools"]
+build-backend = "pdm.backend"
+
+[tool.setuptools]
+py-modules = []
+
+[project]
+name = "pollscraper"
+authors = [
+    {name = "Adam Jaspan", email = "adam.jaspan@googlemail.com"},
+]
+readme = "README.rst"
+license = {text = "MIT license"}
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+]
+version = "0.1.0"
+description = "A production-ready web scraping utility, built to monitor polling data hosted by the Economist data team."
+keywords = ["pollscraper"]
+requires-python = ">=3.6"
+dependencies = [
+    "Click>=7.0",
+    "beautifulsoup4",
+    "numpy",
+    "pandas",
+    "pytest",
+    "requests",
+    "urllib3",
+    "urlpath",
+]
+
+[project.urls]
+Homepage = "https://github.com/AEJaspan/pollscraper"
+
+[project.scripts]
+pollscraper = "pollscraper.cli:main"
