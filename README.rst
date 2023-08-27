@@ -30,18 +30,14 @@ Setup
         $ python3.7 -m venv .venv
         $ source .venv/bin/activate
         $ pip install -r requirements_dev.txt
-        $ python setup.py install
+
+.. $ python setup.py install
 
 
 Testing
 --------
 
-.. code-block:: console
-
-        $ make lint
-        $ make test-all
-
-or full testing and linting suite:
+Full testing and linting suite:
 
 .. code-block:: console
 
@@ -54,7 +50,7 @@ Building documentation
 
 .. code-block:: console
 
-        $ make docs
+        $ make servedocs
 
 
 Deployment
@@ -75,6 +71,10 @@ Features
 --------
 
 * TODO
+
+        * Useful unit tests
+        * Logging in trends file
+        * Error checking in trends file
 
 Credits
 -------

@@ -110,3 +110,8 @@ ENV/
 # results
 
 *.csv
+
+
+pip-wheel-metadata/
+*.DS_Store
+*.cfg
