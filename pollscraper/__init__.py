@@ -1,8 +1,9 @@
 """Top-level package for PollScraper."""
+import importlib.metadata
 
+__version__ = importlib.metadata.version(__package__ or __name__)
 __author__ = """Adam Jaspan"""
 __email__ = 'adam.jaspan@googlemail.com'
-__version__ = '0.1.0'
 
 import logging
 from root import ROOT_DIR
