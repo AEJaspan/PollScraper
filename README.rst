@@ -58,7 +58,7 @@ Deployment
 
 .. code-block:: console
 
-        $ bump2version patch # possible: major / minor / patch
+        $ bumpversion --current-version <current_version> minor # possible: major / minor / patch
         $ git push
         $ git push --tags
 
