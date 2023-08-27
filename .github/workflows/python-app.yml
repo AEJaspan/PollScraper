@@ -50,14 +50,15 @@ jobs:
 
     - name: Scrape Polls
       run: |
-        pollscraper --debug 10 --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results data/data.csv
+        pollscraper --debug 10 --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results_dir data/
 
     - name: Create temp artifact folder
       run: mkdir downloads
       
     - name: Add artifacts to be published
       run: |
-        cp data/data.csv downloads/
+        cp data/polls.csv downloads/
+        cp data/trends.csv downloads/
   
     - name: Upload Artifact GitHub Action
       uses: actions/upload-artifact@v2
