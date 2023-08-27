@@ -5,6 +5,7 @@ __email__ = 'adam.jaspan@googlemail.com'
 __version__ = '0.1.0'
 
 import logging
+from root import ROOT_DIR
 
 # Default logging level for the package
 package_log_level = logging.DEBUG
@@ -19,7 +20,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Create a FileHandler and set its level and format
-file_handler = logging.FileHandler("logs/pollscraper.log")
+file_handler = logging.FileHandler(f"{ROOT_DIR}/logs/pollscraper.log")
 file_handler.setLevel(package_log_level)
 formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

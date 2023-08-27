@@ -115,3 +115,4 @@ ENV/
 pip-wheel-metadata/
 *.DS_Store
 *.cfg
+*.log
