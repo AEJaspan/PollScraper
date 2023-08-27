@@ -22,7 +22,6 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
 ]
-dynamic = ["dependencies"]
 version = "0.1.0"
 description = "A production-ready web scraping utility, built to monitor polling data hosted by the Economist data team."
 keywords = ["pollscraper"]
