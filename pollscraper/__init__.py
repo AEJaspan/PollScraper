@@ -1,7 +1,11 @@
 """Top-level package for PollScraper."""
-import importlib.metadata
+try:
+    from importlib import metadata
+except ImportError:  # for Python<3.8
+    import importlib_metadata as metadata
 
-__version__ = importlib.metadata.version(__package__ or __name__)
+
+__version__ = metadata.version(__package__)
 __author__ = """Adam Jaspan"""
 __email__ = 'adam.jaspan@googlemail.com'
 

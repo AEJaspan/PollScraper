@@ -35,6 +35,7 @@ dependencies = [
     "requests",
     "urllib3",
     "urlpath",
+    "importlib-metadata",
 ]
 
 [project.urls]
