@@ -6,7 +6,6 @@ from pollscraper.scraper import DataPipeline
 from pollscraper.trends import PollTrend
 from pollscraper import logger
 from pollscraper.__init__ import update_log_level
-from root import ROOT_DIR
 
 
 URL = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
@@ -27,7 +26,7 @@ URL = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
               help='Level of verbosity for debugging.')
 def main(url, results_dir, debug):
     try:
-        filepath = f'{ROOT_DIR}/{results_dir}'
+        filepath = f'{results_dir}'
         update_log_level(debug)
         logger.debug(f'Info level set to {debug}')
         dp = DataPipeline()

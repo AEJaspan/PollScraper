@@ -12,18 +12,18 @@ pollscraper.cli module
     :undoc-members:
     :show-inheritance:
 
-pollscraper.datamodel module
-----------------------------
+pollscraper.scraper module
+--------------------------
 
-.. automodule:: pollscraper.datamodel
+.. automodule:: pollscraper.scraper
     :members:
     :undoc-members:
     :show-inheritance:
 
-pollscraper.pollscraper module
-------------------------------
+pollscraper.trends module
+-------------------------
 
-.. automodule:: pollscraper.pollscraper
+.. automodule:: pollscraper.trends
     :members:
     :undoc-members:
     :show-inheritance:

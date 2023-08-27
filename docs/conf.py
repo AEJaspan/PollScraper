@@ -22,6 +22,9 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 import pollscraper
+import pollscraper.cli
+import pollscraper.scraper
+import pollscraper.trends
 
 # -- General configuration ---------------------------------------------
 
