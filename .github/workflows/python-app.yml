@@ -50,7 +50,7 @@ jobs:
 
     - name: Scrape Polls
       run: |
-        pollscraper --debug 10 --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results_dir data/
+        pollscraper --quiet False --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results_dir data/
 
     - name: Create temp artifact folder
       run: mkdir downloads
