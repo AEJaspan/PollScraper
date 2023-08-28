@@ -1,6 +1,7 @@
 import pandas as pd
-# from pollscraper import logger
+from pollscraper import logger
 from datetime import datetime
+from pandas.api.types import is_datetime64_any_dtype as is_datetime
 
 
 class PollTrend:
@@ -25,6 +26,9 @@ class PollTrend:
             pandas.DataFrame:
                 DataFrame containing daily trends for each candidate.
         """
+        if not is_datetime(poll_data['date']):
+            raise ValueError('Preprocessing step has been missed. '
+                             'Date column incorrectly formatted')
         poll_data = poll_data.sort_values(by='date')
 
         # Create a date range starting from
@@ -32,14 +36,15 @@ class PollTrend:
         start_date = datetime(2023, 10, 11)
         end_date = poll_data['date'].max()
         date_range = pd.date_range(start=start_date, end=end_date)
-
+        poll_data.set_index('date', inplace=True)
         # Initialize an empty DataFrame to store trends
         trends = pd.DataFrame({'date': date_range})
 
-        # Calculate rolling average trends for each candidate
+        # Calculate average on each day and calculate
+        # rolling average trends for each candidate
         for candidate in poll_data.columns[3:]:
-            rolling_avg = poll_data[candidate]\
-                .rolling(window=7, min_periods=1).mean()
+            rolling_avg = poll_data[candidate].groupby('date').mean()\
+                .rolling('7D').mean()
             trends[candidate] = rolling_avg
-
+        logger.info('Rolling averages calculated.')
         return trends
