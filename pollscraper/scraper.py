@@ -175,7 +175,7 @@ class DataPipeline:
         # parse dates
         try:
             table_df['Date'] = pd.to_datetime(
-                    table_df['Date'], errors='coerce'
+                    table_df['Date'], errors='coerce',
                 )
         except pd._libs.tslibs.parsing.DateParseError as e:
             logger.fatal('Date Time parsing error.')
