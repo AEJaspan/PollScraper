@@ -47,3 +47,13 @@ The polls file should have columns for date, pollster, n (sample size), and each
 Values for polls and trends should be a number from 0 to 1.
 The polls file should have a row for each poll. The trends file should have a row for each day, starting with October 11th, 2023.
 Examples are shown in the ``data/polls.example.csv`` and ``data/trends.example.csv`` files.
+
+
+
+Assumptions
+~~~~~~~~~~~~~
+
+It can be assumed that the structure of the source table will never change. As such, I am assuming that this table reflects a complete
+record of all polling data available up to the current date, and that this data will all be served in one table. This simplifies the code,
+as it allows me to not handle multiple tables being read, or to persist and then combine polling data between runs. This also means that when
+a candidate drops out, their historical data should remain on the polling records.
