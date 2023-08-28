@@ -67,14 +67,6 @@ Deployment
 * Documentation: https://pollscraper.readthedocs.io.
 
 
-Features
---------
-
-* TODO
-
-        * Useful unit tests
-        * Logging in trends file
-        * Error checking in trends file
 
 Credits
 -------
