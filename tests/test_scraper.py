@@ -53,7 +53,7 @@ def test_command_line_interface(get_target_url):
     runner = CliRunner()
     url = get_target_url
     output = 'data/'
-    commands = f'--debug 10 --url {url} --results_dir {ROOT_DIR}/{output}'
+    commands = f'--quiet --url {url} --results_dir {ROOT_DIR}/{output}'
     result = runner.invoke(cli.main, commands)
     print(result.output)
     assert result.exit_code == 0

@@ -14,12 +14,14 @@ def get_target_url():
 
 @pytest.fixture
 def sample_poll_data():
-    return pd.read_csv('data/polls.example.csv', index_col=0)
+    return pd.read_csv('data/polls.example.csv',
+                       index_col=0, parse_dates=['date'])
 
 
 @pytest.fixture
 def sample_trends_data():
-    return pd.read_csv('data/trends.example.csv', index_col=0)
+    return pd.read_csv('data/trends.example.csv',
+                       index_col=0, parse_dates=['date'])
 
 
 # Fixture for sample HTML content
