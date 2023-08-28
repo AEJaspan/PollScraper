@@ -30,7 +30,6 @@ def main(url, results_dir, quiet):
             logger.setLevel(logging.INFO)
         else:
             logger.setLevel(logging.DEBUG)
-        # update_log_level(debug)
         logger.debug(f'Info level set to {quiet}')
         dp = DataPipeline()
         logger.info('Extracting data from URL.')
@@ -40,13 +39,13 @@ def main(url, results_dir, quiet):
         logger.info(f'Saving polling data to {filepath}/polls.csv')
         processed_data.to_csv(f'{filepath}/polls.csv')
         logger.info('Calculating trends.')
-        trends = PollTrend.calculate_trends(processed_data)
+        trends, _, _ = PollTrend.calculate_trends(processed_data, n_sigma=5)
         logger.info(f'Saving trend data to {filepath}/trends.csv')
         trends.to_csv(f'{filepath}/trends.csv')
         logger.info('Operation completed sucessfully.')
         return 0
     except Exception as e:
-        print(e)
+        logger.error(e)
         return 0
 
 

@@ -74,8 +74,21 @@ class DataPipeline:
             table_data.append(row_data)
         return table_data
 
+    def parse_html_bs4(self, html_content):
+        soup = BeautifulSoup(html_content, 'html.parser')
+        tables = soup.find_all('table')
+        if not tables:
+            logger.warning("No table found on the website.")
+            raise ValueError('No tables found')
+        n_tables = len(tables)
+        if n_tables > 1:
+            logger.warning('Unexpected URL format - '
+                           f'{n_tables} tables found.'
+                           'Only processing the first table.')
+        table_data = self.extract_html_table_data(tables[0])
+        return self.table_data_to_dataframe(table_data)
+
     def parse_html_table(self, html_content):
-        # sourcery skip: raise-from-previous-error
         """
         Parse the HTML content to extract tables.
 
@@ -88,24 +101,12 @@ class DataPipeline:
         """
         logger.debug("Attempting to parse HTML content.")
         try:
-            # raise ValueError
             return pd.read_html(html_content)[0]
         except ValueError as ve:
             logging\
                 .warning(f'Pandas failed to read html content with error {ve}')
             logger.info('Falling back to BeautifulSoup.')
-            soup = BeautifulSoup(html_content, 'html.parser')
-            tables = soup.find_all('table')
-            if not tables:
-                logger.warning("No table found on the website.")
-                raise ValueError('No tables found')
-            n_tables = len(tables)
-            if n_tables > 1:
-                logger.warning('Unexpected URL format - '
-                               '{n_tables} tables found.'
-                               'Only processing the first table.')
-            table_data = self.extract_html_table_data(tables[0])
-            return self.table_data_to_dataframe(table_data)
+            return self.parse_html_bs4(html_content)
         except Exception as e:
             logger.error(f"Error extracting table data: {e}")
             raise e
@@ -161,7 +162,9 @@ class DataPipeline:
             pandas.DataFrame: Cleaned DataFrame
         """
         common_headers = list(self.common_header_mapping.keys())
-        candidate_headers = list(set(table_df.columns)-set(common_headers))
+        candidate_headers = sorted(
+                list(set(table_df.columns)-set(common_headers))
+            )
         expected_headers = common_headers + candidate_headers
 
         # Clean missing values
@@ -181,19 +184,31 @@ class DataPipeline:
             logger.fatal('Date Time parsing error.')
             raise e
 
+        # Date parsing check
+        invalid_dates = table_df[table_df['Date'].isnull()]
+        if not invalid_dates.empty:
+            logger.warning(f"Invalid dates detected: {invalid_dates}")
+
         # Cast polling count to numeric.
         table_df['Sample'] = pd.to_numeric(table_df['Sample'], errors='coerce')
+
+        # Sample size validation
+        invalid_samples = table_df[table_df['Sample'] < 10]
+        if not invalid_samples.empty:
+            logger.warning(f"Small sample sizes detected: {invalid_samples}")
 
         # Calculate and check polling fractions
         for c in candidate_headers:
             table_df[c] = table_df[c].str.rstrip('%').astype('float')/100
         table_df['combined_percentage'] = table_df[candidate_headers]\
             .sum(axis=1)
+
         checksum = table_df[
                 ~np.isclose(table_df['combined_percentage'], 1, atol=0.02)
             ].shape[0]
         if checksum > 0:
             logger.warning(f'{checksum} Row(s) with unbalanced vote-share')
+
         table_df = table_df[expected_headers]
         return table_df.rename(columns=self.common_header_mapping)
 
