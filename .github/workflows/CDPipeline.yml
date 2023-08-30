@@ -1,0 +1,49 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Continuous Deployment Pipeline
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '30 17 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@main
+    - name: Set up Python 3.7.17
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.7.17"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements_dev.txt ]; then pip install -r requirements_dev.txt; fi
+        python setup.py install
+
+    - name: Scrape Polls
+      run: |
+        pollscraper --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results_dir data/
+    - name: Create temp artifact folder
+      run: mkdir downloads
+      
+    - name: Add artifacts to be published
+      run: |
+        cp data/polls.csv downloads/
+        cp data/trends.csv downloads/
+        cp logs/pollscraper.log downloads/
+  
+    - name: Upload Artifact GitHub Action
+      uses: actions/upload-artifact@v2
+      with: 
+        name: assets-for-download
+        path: downloads
