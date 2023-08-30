@@ -89,12 +89,12 @@ Deployment
 TODO
 --------
 
-.. role:: strike
+.. container:: strike
 
-* :strike:`Separation of Concerns - separate CI and CD pipelines``
-* :strike:`Add separate badges for each new pipeline``
-* :strike:`Parameterize the HTTP requests via Click``
-* :strike:`Tidy up documentation, remove stale references such as PyPi``
+        * Separation of Concerns - separate CI and CD pipelines
+        * Add separate badges for each new pipeline
+        * Parameterize the HTTP requests via Click
+        * Tidy up documentation, remove stale references such as PyPi
 
 Credits
 -------
