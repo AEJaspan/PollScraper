@@ -22,9 +22,28 @@ class DataPipeline:
         logger (logger.Logger): Logger instance for logging messages.
     """
 
-    def __init__(self):
+    def __init__(self, http_n_retries=5,
+                 http_connection_timeout=5,
+                 http_read_timeout=30) -> None:
         """
         Initialize the DataPipeline object.
+
+        For timeout policy, see:
+        https://requests.readthedocs.io/en/latest/user/advanced/#timeouts
+        For retry options, see:
+        https://requests.readthedocs.io/en/latest/user/advanced/#example-automatic-retries
+
+        Args:
+            http_n_retries (int, optional): Number of attempts to connect to.
+                                            Defaults to 5.
+            http_connection_timeout (int, optional): number of seconds Requests
+                                                     will wait for your client
+                                                     to establish a connection
+                                                     to a remote machine.
+                                                     Defaults to 5.
+            http_read_timeout (int, optional): number of seconds the client
+                                               will wait for the server to
+                                               send a response. Defaults to 30.
         """
         self.common_header_mapping = {
             'Date': 'date',
@@ -73,6 +92,11 @@ class DataPipeline:
             )
             response.raise_for_status()
             return response
+        except requests.exceptions.Timeout as e:
+            logger.error('Request timed out. Try increasing '
+                         'the timeout policy. For instructions, '
+                         'see pollscraper --help')
+            raise e
         except requests.exceptions.HTTPError as e:
             logger.error(f'requests.exceptions.HTTPError: {e}')
             raise e

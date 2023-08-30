@@ -22,7 +22,22 @@ URL = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
 @click.option('--quiet', default=False, is_flag=True,
               help='Reduce streamed logging output. '
                    '(This does not affect output in the log file)')
-def main(url, results_dir, quiet):
+@click.option('--connect_timeout', default=3.05, help="The connect timeout is "
+              "the number of seconds Requests will wait for your "
+              "client to establish a connection to a remote machine "
+              "(corresponding to the connect()) call on the socket. "
+              "It's a good practice to set connect timeouts to slightly "
+              "larger than a multiple of 3, which is the default TCP "
+              "packet retransmission window.")
+@click.option('--read_timeout', default=30, help='Once your client has '
+              'connected to the server and sent the HTTP request, '
+              'the read timeout is the number of seconds the client '
+              "will wait for the server to send a response.")
+@click.option('--http_n_retries', default=5, help="Sets number of "
+              "automatic retries to connect to target HTML after failed "
+              "connection")
+def main(url, results_dir, quiet, connect_timeout,
+         read_timeout, http_n_retries) -> None:
     try:
         filepath = f'{results_dir}'
         if quiet:
@@ -31,10 +46,10 @@ def main(url, results_dir, quiet):
         else:
             logger.setLevel(logging.DEBUG)
         logger.info('Running PollScraper Pipeline!')
-        logger.debug(f'Logging set to logging.DEBUG '
+        logger.debug('Logging set to logging.DEBUG '
                      'Reduce logging output with flag: '
                      '--quiet')
-        dp = DataPipeline()
+        dp = DataPipeline(connect_timeout, read_timeout, http_n_retries)
         logger.debug('Extracting data from URL.')
         table_df = dp.extract_table_data(url)
         logger.debug('Cleaning poll data.')
