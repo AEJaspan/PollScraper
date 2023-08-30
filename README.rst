@@ -27,13 +27,26 @@ The build pipeline is also run as a cron job that executes at 17:30 daily, so th
 Setup
 --------
 
-.. code-block:: consoleß
+.. code-block:: console
 
         $ python3.8 -m venv .venv
         $ source .venv/bin/activate
         $ pip install -r requirements_dev.txt
 
 .. $ python setup.py install
+
+
+
+Run Pipeline
+----------------
+
+.. code-block:: console
+
+        $ # For information on pollscraper argument:
+        $ pollscraper --help
+        $ # To scrape polls, and calculate trends:
+        $ pollscraper --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results_dir
+ data/ --quiet
 
 
 Testing
@@ -68,7 +81,13 @@ Deployment
 * Free software: MIT license
 * Documentation: https://pollscraper.readthedocs.io.
 
+TODO
+--------
 
+* Separation of Concerns - separate CI and CD pipelines
+* Add separate badges for each new pipeline
+* Parameterize the HTTP requests via Click
+* Tidy up documentation, remove stale references such as PyPi
 
 Credits
 -------
