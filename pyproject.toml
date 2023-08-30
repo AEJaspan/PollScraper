@@ -21,6 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
 ]
 version = "0.2.2"
 description = "A production-ready web scraping utility, built to monitor polling data hosted by the Economist data team."

@@ -21,15 +21,15 @@ A production-ready web scraping utility, built to monitor polling data hosted by
 
 Artefacts from the latest build can be downloaded in the `Actions tab <https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml>`_.
 
-The build pipeline is also run as a cron job that executes at 17:30 daily, so these artefacts also reflect the most recent poll results.
+The build pipeline is also run as a cron job that executes at 17:30 daily, so these artifacts also reflect the most recent poll results.
 
 
 Setup
 --------
 
-.. code-block:: console
+.. code-block:: consoleß
 
-        $ python3.7 -m venv .venv
+        $ python3.8 -m venv .venv
         $ source .venv/bin/activate
         $ pip install -r requirements_dev.txt
 
