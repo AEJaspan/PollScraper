@@ -30,19 +30,22 @@ def main(url, results_dir, quiet):
             logger.setLevel(logging.INFO)
         else:
             logger.setLevel(logging.DEBUG)
-        logger.debug(f'Info level set to {quiet}')
+        logger.info('Running PollScraper Pipeline!')
+        logger.debug(f'Logging set to logging.DEBUG '
+                     'Reduce logging output with flag: '
+                     '--quiet')
         dp = DataPipeline()
-        logger.info('Extracting data from URL.')
+        logger.debug('Extracting data from URL.')
         table_df = dp.extract_table_data(url)
-        logger.info('Cleaning poll data.')
+        logger.debug('Cleaning poll data.')
         processed_data = dp.clean_data(table_df)
         logger.info(f'Saving polling data to {filepath}/polls.csv')
         processed_data.to_csv(f'{filepath}/polls.csv')
-        logger.info('Calculating trends.')
+        logger.debug('Calculating trends.')
         trends, _, _ = PollTrend.calculate_trends(processed_data, n_sigma=5)
         logger.info(f'Saving trend data to {filepath}/trends.csv')
         trends.to_csv(f'{filepath}/trends.csv')
-        logger.info('Operation completed sucessfully.')
+        logger.info('Operation completed successfully.')
         return 0
     except Exception as e:
         logger.error(e)

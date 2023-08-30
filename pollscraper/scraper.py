@@ -60,18 +60,18 @@ class DataPipeline:
             the HTML content.
         """
         logger.debug("Attempting to fetch HTML content.")
-        logger.info('Attempting HTTP request with:')
-        logger.info(f'URL: {url}')
-        logger.info(f'timeout_policy: {self.timeout_policy}')
-        logger.info(f'headers: {self.headers}')
-        logger.info(f'retries: {self.retries}')
+        logger.debug('Attempting HTTP request with:')
+        logger.debug(f'URL: {url}')
+        logger.debug(f'timeout_policy: {self.timeout_policy}')
+        logger.debug(f'headers: {self.headers}')
+        logger.debug(f'retries: {self.retries}')
         try:
             response = self.session.get(
                 url,
                 headers=self.headers,
                 timeout=self.timeout_policy
             )
-            logger.error(response.raise_for_status())
+            response.raise_for_status()
             return response
         except requests.exceptions.HTTPError as e:
             logger.error(f'requests.exceptions.HTTPError: {e}')
@@ -148,14 +148,16 @@ class DataPipeline:
             list or pandas.DataFrame: A list of lists if table
             data is found.
         """
-        logger.debug(f"Attempting to access content from {url}.")
         # OO library to ingest URL string formats (slightly overkill)
         url = URL(url)
         response = self.fetch_html_content(url)
         if url.suffix == '.html':
             table_data = self.parse_html_table(response.content)
         else:
-            raise Exception('Undefined URL format.')
+            logger.warning(f'Error extracting data from source {url}')
+            logger.warning('No protocol yet implemented for '
+                           f'scraping {url.suffix} sources.')
+            raise ValueError('Undefined URL format.')
         return table_data
 
     def table_data_to_dataframe(self, table_data):
@@ -205,7 +207,7 @@ class DataPipeline:
         # parse dates
         try:
             table_df['Date'] = pd.to_datetime(
-                    table_df['Date'], errors='coerce',
+                    table_df['Date'], errors='raise', format='%m/%d/%y'
                 )
         except pd._libs.tslibs.parsing.DateParseError as e:
             logger.fatal('Date Time parsing error.')
