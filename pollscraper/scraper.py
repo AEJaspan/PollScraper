@@ -66,37 +66,11 @@ class DataPipeline:
         logger.info(f'headers: {self.headers}')
         logger.info(f'retries: {self.retries}')
         try:
-            # s = requests.Session()
-
-            # retries = Retry(total=5,
-            #                 backoff_factor=0.1,
-            #                 status_forcelist=[ 500, 502, 503, 504 ])
-            # s.mount('http://', HTTPAdapter(max_retries=retries))
-            # timeout_connect = 5
-            # timeout_read = 30
-            # headers = {'Accept-Encoding': 'identity'}
-            # Changing from default timeout (None)
-            # to avoid permanent hang
-            # response = s.get(
-            #                     url,
-            #                     headers=headers,
-            #                     timeout=(
-            #                         timeout_connect,
-            #                         timeout_read
-            #                         )
-            #                 )
-
             response = self.session.get(
                 url,
                 headers=self.headers,
                 timeout=self.timeout_policy
             )
-            # logger.error(response.raise_for_status())
-            # # Raise exception for 4xx and 5xx status codes
-            # return response
-            # if response.status_code >= 400:
-            #     logger.error(response.text)
-            # Raise exception for 4xx and 5xx status codes
             logger.error(response.raise_for_status())
             return response
         except requests.exceptions.HTTPError as e:
