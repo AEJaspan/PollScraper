@@ -6,6 +6,7 @@ import numpy as np
 import logging
 from urlpath import URL
 from pollscraper import logger
+from requests.adapters import HTTPAdapter, Retry
 
 
 class DataPipeline:
@@ -30,6 +31,21 @@ class DataPipeline:
             'Pollster': 'pollster',
             'Sample': 'n'
         }
+        self.session = requests.Session()
+        self.retries = Retry(total=5,
+                             backoff_factor=0.1,
+                             status_forcelist=[
+                                    500,
+                                    502,
+                                    503,
+                                    504
+                                 ])
+        self.adapter = HTTPAdapter(max_retries=self.retries)
+        self.session.mount('http://', self.adapter)
+        timeout_connect = 5
+        timeout_read = 30
+        self.timeout_policy = (timeout_connect, timeout_read)
+        self.headers = {'Accept-Encoding': 'identity'}
         logger.debug("Data Pipeline Initialised.")
 
     def fetch_html_content(self, url):
@@ -44,12 +60,48 @@ class DataPipeline:
             the HTML content.
         """
         logger.debug("Attempting to fetch HTML content.")
+        logger.info('Attempting HTTP request with:')
+        logger.info(f'URL: {url}')
+        logger.info(f'timeout_policy: {self.timeout_policy}')
+        logger.info(f'headers: {self.headers}')
+        logger.info(f'retries: {self.retries}')
         try:
-            headers = {'Accept-Encoding': 'identity'}
-            response = requests.get(url, headers=headers)
-            response.raise_for_status()
+            # s = requests.Session()
+
+            # retries = Retry(total=5,
+            #                 backoff_factor=0.1,
+            #                 status_forcelist=[ 500, 502, 503, 504 ])
+            # s.mount('http://', HTTPAdapter(max_retries=retries))
+            # timeout_connect = 5
+            # timeout_read = 30
+            # headers = {'Accept-Encoding': 'identity'}
+            # Changing from default timeout (None)
+            # to avoid permanent hang
+            # response = s.get(
+            #                     url,
+            #                     headers=headers,
+            #                     timeout=(
+            #                         timeout_connect,
+            #                         timeout_read
+            #                         )
+            #                 )
+
+            response = self.session.get(
+                url,
+                headers=self.headers,
+                timeout=self.timeout_policy
+            )
+            # logger.error(response.raise_for_status())
+            # # Raise exception for 4xx and 5xx status codes
+            # return response
+            # if response.status_code >= 400:
+            #     logger.error(response.text)
             # Raise exception for 4xx and 5xx status codes
+            logger.error(response.raise_for_status())
             return response
+        except requests.exceptions.HTTPError as e:
+            logger.error(f'requests.exceptions.HTTPError: {e}')
+            raise e
         except requests.exceptions.RequestException as e:
             logger.error(f'Error fetching HTML: {e}')
             raise e
@@ -123,6 +175,7 @@ class DataPipeline:
             data is found.
         """
         logger.debug(f"Attempting to access content from {url}.")
+        # OO library to ingest URL string formats (slightly overkill)
         url = URL(url)
         response = self.fetch_html_content(url)
         if url.suffix == '.html':
@@ -214,8 +267,6 @@ class DataPipeline:
 
 
 def main():
-    from pollscraper.__init__ import update_log_level
-    update_log_level(10)
     url = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
     dp = DataPipeline()
     table_df = dp.extract_table_data(url)
