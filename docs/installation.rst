@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install PollScraper, run this command in your terminal:
+Currently PollScraper must be installed from source. Download the source, and run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install pollscraper
+    $ pip install .
 
-This is the preferred method to install PollScraper, as it will always install the most recent stable release.
+This is the preferred method to install PollScraper.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -23,8 +23,8 @@ you through the process.
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
 
 
-From sources
-------------
+Downloading source
+-------------------
 
 The sources for PollScraper can be downloaded from the `Github repo`_.
 
@@ -39,12 +39,6 @@ Or download the `tarball`_:
 .. code-block:: console
 
     $ curl -OJL https://github.com/AEJaspan/pollscraper/tarball/master
-
-Once you have a copy of the source, you can install it with:
-
-.. code-block:: console
-
-    $ python setup.py install
 
 
 .. _Github repo: https://github.com/AEJaspan/pollscraper
