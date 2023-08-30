@@ -45,7 +45,7 @@ Run Pipeline
         $ # For information on pollscraper argument:
         $ pollscraper --help
         $ # To scrape polls, and calculate trends:
-        $ pollscraper --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results_dir data/ --quiet
+        $ pollscraper --url https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html --results_dir data --quiet
 
 
 Testing
