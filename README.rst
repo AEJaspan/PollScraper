@@ -8,6 +8,11 @@ PollScraper
 
 .. image:: https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml/badge.svg
         :target: https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml
+        :alt: Continuous Integration Pipeline
+
+.. image:: https://github.com/AEJaspan/PollScraper/actions/workflows/CDPipeline.yml/badge.svg
+        :target: https://github.com/AEJaspan/PollScraper/actions/workflows/CDPipeline.yml
+        :alt: Continuous Deployment Pipeline
 
 .. image:: https://readthedocs.org/projects/pollscraper/badge/?version=latest
         :target: https://pollscraper.readthedocs.io/en/latest/?version=latest
@@ -18,8 +23,9 @@ PollScraper
 
 A production-ready web scraping utility, built to monitor polling data hosted by the Economist data team.
 
+Artifacts from the latest build can be downloaded in the `Actions tab <https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml>`_.
 
-Artefacts from the latest build can be downloaded in the `Actions tab <https://github.com/AEJaspan/PollScraper/actions/workflows/python-app.yml>`_.
+Artifacts from the latest daily run can be downloaded in the `Actions tab <https://github.com/AEJaspan/PollScraper/actions/workflows/CDPipeline.yml>`_.
 
 The build pipeline is also run as a cron job that executes at 17:30 daily, so these artifacts also reflect the most recent poll results.
 
@@ -83,10 +89,17 @@ Deployment
 TODO
 --------
 
-* Separation of Concerns - separate CI and CD pipelines
-* Add separate badges for each new pipeline
-* Parameterize the HTTP requests via Click
-* Tidy up documentation, remove stale references such as PyPi
+.. |ss| raw:: html
+
+   <strike>
+
+.. |se| raw:: html
+
+   </strike>
+* |ss| Separation of Concerns - separate CI and CD pipelines |se|
+* |ss| Add separate badges for each new pipeline |se|
+* |ss| Parameterize the HTTP requests via Click |se|
+* |ss| Tidy up documentation, remove stale references such as PyPi |se|
 
 Credits
 -------
