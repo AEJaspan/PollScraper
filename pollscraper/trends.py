@@ -47,9 +47,6 @@ class PollTrend:
         outliers_avg = pd.DataFrame()
         outliers_poll = pd.DataFrame()
 
-        # Left align indexer - could also just invert the time series lol
-        # indexer = pd.api.indexers.FixedForwardWindowIndexer(window_size='7D')
-
         # Calculate average on each day and calculate
         # rolling average trends for each candidate
         for candidate in candidate_cols:
@@ -58,9 +55,6 @@ class PollTrend:
             # Ensure there are no missing date stamps
             candidate_data = resampled_candidates.reindex(date_range)
 
-            # Calculate 7 day rolling averages and standard deviations
-            # rolling_avg = candidate_data.rolling(window=indexer, min_periods=1).mean().round(6)
-            # rolling_std = candidate_data.rolling(window=indexer, min_periods=1).std().round(6)
             # Invert for left aligned windows, then restore
             rolling_avg = candidate_data[::-1].rolling('7D').mean()[::-1]
             rolling_std = candidate_data[::-1].rolling('7D').std()[::-1]
