@@ -1,4 +1,5 @@
 from pollscraper.trends import PollTrend
+from pandas.api.types import is_numeric_dtype as is_numeric
 # import pytest
 
 
@@ -29,7 +30,7 @@ def test_candidate_late_join_trends(candidate_late_join_data):
 def test_large_gap_trends(large_gap_data):
     trends, outliers_avg, outliers_poll = PollTrend\
         .calculate_trends(large_gap_data, n_sigma=2)
-
+    assert all(is_numeric(trends[col]) for col in trends.columns[1:])
     assert trends.shape[0]*.05 > outliers_avg.shape[0]
     assert trends.shape[0]*.1 > outliers_poll.shape[0]
 
