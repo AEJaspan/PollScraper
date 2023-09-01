@@ -242,8 +242,10 @@ class DataPipeline:
         if not invalid_dates.empty:
             logger.warning(f"Invalid dates detected: {invalid_dates}")
 
-        # Cast polling count to numeric.
-        table_df['Sample'] = pd.to_numeric(table_df['Sample'], errors='coerce')
+        # Cast polling count to integers.
+        table_df['Sample'] = pd.to_numeric(table_df['Sample'],
+                                           errors='coerce',
+                                           downcast='integer')
 
         # Sample size validation
         invalid_samples = table_df[table_df['Sample'] < 10]
@@ -255,6 +257,9 @@ class DataPipeline:
             table_df[c] = table_df[c].str.rstrip('%').astype('float')/100
         table_df['combined_percentage'] = table_df[candidate_headers]\
             .sum(axis=1)
+
+        for c in candidate_headers:
+            table_df[c] = table_df[c]
 
         checksum = table_df[
                 ~np.isclose(table_df['combined_percentage'], 1, atol=0.02)
