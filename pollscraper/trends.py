@@ -39,7 +39,7 @@ class PollTrend:
         date_range = pd.date_range(start=start_date, end=end_date, freq='D')
         poll_data.set_index('date', inplace=True)
         # Initialize an empty DataFrame to store trends
-        trends = pd.DataFrame({'date': date_range})
+        trends = pd.DataFrame(index=date_range)
         outliers_avg = pd.DataFrame()
         outliers_poll = pd.DataFrame()
 
@@ -52,8 +52,8 @@ class PollTrend:
             candidate_data = resampled_candidates.reindex(date_range)
 
             # Calculate 7 day rolling averages and standard deviations
-            rolling_avg = candidate_data.rolling('7D').mean()
-            rolling_std = candidate_data.rolling('7D').std()
+            rolling_avg = candidate_data.rolling('7D').mean().round(6)
+            rolling_std = candidate_data.rolling('7D').std().round(6)
 
             # Use standard deviations to check for outliers
             # Check against averaged poll data
@@ -65,7 +65,8 @@ class PollTrend:
             trends[candidate] = rolling_avg
             outliers_avg[candidate] = avg_outliers
             outliers_poll.join(individual_outliers, how='outer')
-
+        trends.index.name = 'date'
+        trends.reset_index(inplace=True)
         logger.info('Rolling averages calculated.')
         return trends, outliers_avg, outliers_poll
 
