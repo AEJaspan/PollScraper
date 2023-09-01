@@ -22,6 +22,8 @@ URL = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
 @click.option('--quiet', default=False, is_flag=True,
               help='Reduce streamed logging output. '
                    '(This does not affect output in the log file)')
+@click.option('--n_places', default=4, help="Set floating point precision "
+              "stored in the output .csv files.")
 @click.option('--connect_timeout', default=3.05, help="The connect timeout is "
               "the number of seconds Requests will wait for your "
               "client to establish a connection to a remote machine "
@@ -37,7 +39,7 @@ URL = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
               "automatic retries to connect to target HTML after failed "
               "connection")
 def main(url, results_dir, quiet, connect_timeout,
-         read_timeout, http_n_retries) -> None:
+         read_timeout, http_n_retries, n_places) -> None:
     try:
         filepath = f'{results_dir}'
         if quiet:
@@ -55,11 +57,15 @@ def main(url, results_dir, quiet, connect_timeout,
         logger.debug('Cleaning poll data.')
         processed_data = dp.clean_data(table_df)
         logger.info(f'Saving polling data to {filepath}/polls.csv')
-        processed_data.to_csv(f'{filepath}/polls.csv')
+        # Save to n decimal places
+        processed_data.to_csv(f'{filepath}/polls.csv',
+                              float_format=f'%.{n_places}f')
         logger.debug('Calculating trends.')
         trends, _, _ = PollTrend.calculate_trends(processed_data, n_sigma=5)
         logger.info(f'Saving trend data to {filepath}/trends.csv')
-        trends.to_csv(f'{filepath}/trends.csv')
+        # Save to n decimal places
+        trends.to_csv(f'{filepath}/trends.csv',
+                      float_format=f'%.{n_places}f')
         logger.info('Operation completed successfully.')
         return 0
     except Exception as e:
