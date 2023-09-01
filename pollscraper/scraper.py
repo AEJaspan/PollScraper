@@ -215,6 +215,11 @@ class DataPipeline:
             pandas.DataFrame: Cleaned DataFrame
         """
         common_headers = list(self.common_header_mapping.keys())
+        if not set(common_headers).issubset(table_df.columns):
+            logger.error('Table has missing headings!')
+            logger.error('Table columns are: {table_df.columns}')
+            logger.error('Expecting a minimum of {common_headers}')
+            raise ValueError('Table has missing headings!')
         candidate_headers = sorted(
                 list(set(table_df.columns)-set(common_headers))
             )
@@ -241,6 +246,11 @@ class DataPipeline:
         invalid_dates = table_df[table_df['Date'].isnull()]
         if not invalid_dates.empty:
             logger.warning(f"Invalid dates detected: {invalid_dates}")
+
+        # Sort results by date and then alphabetically by Pollster.
+        table_df = table_df.sort_values(
+                by=['Date', 'Pollster'], ascending=False
+            )
 
         # Cast polling count to integers.
         table_df['Sample'] = pd.to_numeric(table_df['Sample'],
