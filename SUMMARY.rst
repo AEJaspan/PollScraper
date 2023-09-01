@@ -57,3 +57,10 @@ It can be assumed that the structure of the source table will never change. As s
 record of all polling data available up to the current date, and that this data will all be served in one table. This simplifies the code,
 as it allows me to not handle multiple tables being read, or to persist and then combine polling data between runs. This also means that when
 a candidate drops out, their historical data should remain on the polling records.
+
+
+
+Notes
+~~~~~~~~~
+
+Note, scraped values are sorted first by date and then alphabetically by Pollster. This ordering may differ from the source html, but is equivalent. 

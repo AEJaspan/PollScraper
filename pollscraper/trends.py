@@ -40,7 +40,9 @@ class PollTrend:
         # October 11th, 2023, to the last poll date
         start_date = datetime(2023, 10, 11)
         end_date = poll_data['date'].max()
-        date_range = pd.date_range(start=start_date, end=end_date, freq='D')[::-1]
+        date_range = pd.date_range(
+                start=start_date, end=end_date, freq='D'
+            )[::-1]
         poll_data.set_index('date', inplace=True)
         # Initialize an empty DataFrame to store trends
         trends = pd.DataFrame(index=date_range)
