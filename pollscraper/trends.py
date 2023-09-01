@@ -30,30 +30,40 @@ class PollTrend:
         if not is_datetime(poll_data['date']):
             raise ValueError('Preprocessing step has been missed. '
                              'Date column incorrectly formatted')
-        poll_data = poll_data.sort_values(by='date')
-
+        poll_data = poll_data.sort_values(by='date', ascending=False)
+        # candidate_cols = poll_data.columns[2:]
+        reserved_cols = ['pollster', 'n', 'date']
+        candidate_cols = sorted(
+            [c for c in poll_data.columns if c not in reserved_cols]
+        )
         # Create a date range starting from
         # October 11th, 2023, to the last poll date
         start_date = datetime(2023, 10, 11)
         end_date = poll_data['date'].max()
-        date_range = pd.date_range(start=start_date, end=end_date, freq='D')
+        date_range = pd.date_range(start=start_date, end=end_date, freq='D')[::-1]
         poll_data.set_index('date', inplace=True)
         # Initialize an empty DataFrame to store trends
         trends = pd.DataFrame(index=date_range)
         outliers_avg = pd.DataFrame()
         outliers_poll = pd.DataFrame()
 
+        # Left align indexer - could also just invert the time series lol
+        # indexer = pd.api.indexers.FixedForwardWindowIndexer(window_size='7D')
+
         # Calculate average on each day and calculate
         # rolling average trends for each candidate
-        for candidate in poll_data.columns[3:]:
+        for candidate in candidate_cols:
             resampled_candidates = poll_data[candidate].resample('D').mean()
 
             # Ensure there are no missing date stamps
             candidate_data = resampled_candidates.reindex(date_range)
 
             # Calculate 7 day rolling averages and standard deviations
-            rolling_avg = candidate_data.rolling('7D').mean().round(6)
-            rolling_std = candidate_data.rolling('7D').std().round(6)
+            # rolling_avg = candidate_data.rolling(window=indexer, min_periods=1).mean().round(6)
+            # rolling_std = candidate_data.rolling(window=indexer, min_periods=1).std().round(6)
+            # Invert for left aligned windows, then restore
+            rolling_avg = candidate_data[::-1].rolling('7D').mean()[::-1]
+            rolling_std = candidate_data[::-1].rolling('7D').std()[::-1]
 
             # Use standard deviations to check for outliers
             # Check against averaged poll data

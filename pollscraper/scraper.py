@@ -242,6 +242,9 @@ class DataPipeline:
         if not invalid_dates.empty:
             logger.warning(f"Invalid dates detected: {invalid_dates}")
 
+        # Sort results by date
+        table_df = table_df.sort_values(by='Date', ascending=False)
+
         # Cast polling count to integers.
         table_df['Sample'] = pd.to_numeric(table_df['Sample'],
                                            errors='coerce',
