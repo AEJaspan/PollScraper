@@ -64,10 +64,12 @@ class PollTrend:
             # Use standard deviations to check for outliers
             # Check against averaged poll data
             avg_outliers = check_for_outliers_in_poll_averages(
-                candidate_data, rolling_avg, rolling_std, n_sigma)
+                candidate_data, rolling_avg, rolling_std, n_sigma, candidate
+            )
             # Check against each individual poll
             individual_outliers = check_for_outliers_in_individual_polls(
-                poll_data, candidate, rolling_avg, rolling_std, n_sigma)
+                poll_data, candidate, rolling_avg, rolling_std, n_sigma
+            )
             trends[candidate] = rolling_avg
             outliers_avg[candidate] = avg_outliers
             outliers_poll.join(individual_outliers, how='outer')
@@ -77,12 +79,15 @@ class PollTrend:
         return trends, outliers_avg, outliers_poll
 
 
-def check_for_outliers_in_poll_averages(poll_averages, avg, sig, n_sigma):
+def check_for_outliers_in_poll_averages(
+            poll_averages, avg, sig, n_sigma, candidate
+        ):
     avg_outliers = poll_averages.loc[
         np.abs(poll_averages - avg) >= n_sigma * sig
     ]
     if not avg_outliers.empty:
-        logger.warning(f'{avg_outliers.shape[0]} poll averages detected '
+        logger.warning(f'Checking averaged polls for candidate {candidate}.')
+        logger.warning(f'Found {avg_outliers.shape[0]} poll averages detected '
                        f'at > {n_sigma} sigma from the mean')
     return avg_outliers
 
@@ -105,6 +110,7 @@ def check_for_outliers_in_individual_polls(
         >= n_sigma * check_individual_polls['sigma_band']
     ]
     if not individual_outliers.empty:
-        logger.warning(f'{individual_outliers.shape[0]} individual polls '
-                       f'detected at > {n_sigma} sigma from the mean')
+        logger.warning(f'Checking individual polls for candidate {candidate}.')
+        logger.warning(f'Found {individual_outliers.shape[0]} individual '
+                       f'polls detected at > {n_sigma} sigma from the mean')
     return individual_outliers[candidate]

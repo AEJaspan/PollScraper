@@ -1,5 +1,4 @@
 """Console script for pollscraper."""
-import sys
 import click
 import logging
 from pollscraper.scraper import DataPipeline
@@ -19,6 +18,11 @@ URL = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
               default='data/',
               prompt='Output data path.',
               help='Location for scraped polling data to be stored.')
+@click.option('--n_sigma',
+              default=5,
+              help='Number of standard deviations away from the mean '
+              'at which a warning will be raised when checking the '
+              'polling data per candidate.')
 @click.option('--quiet', default=False, is_flag=True,
               help='Reduce streamed logging output. '
                    '(This does not affect output in the log file)')
@@ -39,7 +43,8 @@ URL = 'https://cdn-dev.economistdatateam.com/jobs/pds/code-test/index.html'
               "automatic retries to connect to target HTML after failed "
               "connection")
 def main(url, results_dir, quiet, connect_timeout,
-         read_timeout, http_n_retries, n_places) -> None:
+         read_timeout, http_n_retries, n_places,
+         n_sigma) -> None:
     try:
         filepath = f'{results_dir}'
         if quiet:
@@ -61,7 +66,9 @@ def main(url, results_dir, quiet, connect_timeout,
         processed_data.to_csv(f'{filepath}/polls.csv',
                               float_format=f'%.{n_places}f')
         logger.debug('Calculating trends.')
-        trends, _, _ = PollTrend.calculate_trends(processed_data, n_sigma=5)
+        trends, _, _ = PollTrend.calculate_trends(
+                processed_data, n_sigma=n_sigma
+            )
         logger.info(f'Saving trend data to {filepath}/trends.csv')
         # Save to n decimal places
         trends.to_csv(f'{filepath}/trends.csv',
@@ -74,4 +81,7 @@ def main(url, results_dir, quiet, connect_timeout,
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    cmd = f'--url {URL} --results_dir data/'
+    print(f"Running $ PollScraper with options: {cmd}")
+    main(cmd.split())
+    # sys.exit(main())
