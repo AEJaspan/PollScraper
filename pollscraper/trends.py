@@ -111,6 +111,6 @@ def check_for_outliers_in_individual_polls(
     ]
     if not individual_outliers.empty:
         logger.warning(f'Checking individual polls for candidate {candidate}.')
-        logger.warning(f'Found {individual_outliers.shape[0]} individual polls '
-                       f'detected at > {n_sigma} sigma from the mean')
+        logger.warning(f'Found {individual_outliers.shape[0]} individual '
+                       f'polls detected at > {n_sigma} sigma from the mean')
     return individual_outliers[candidate]

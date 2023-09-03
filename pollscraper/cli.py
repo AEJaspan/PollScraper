@@ -1,5 +1,4 @@
 """Console script for pollscraper."""
-import sys
 import click
 import logging
 from pollscraper.scraper import DataPipeline
@@ -67,7 +66,9 @@ def main(url, results_dir, quiet, connect_timeout,
         processed_data.to_csv(f'{filepath}/polls.csv',
                               float_format=f'%.{n_places}f')
         logger.debug('Calculating trends.')
-        trends, _, _ = PollTrend.calculate_trends(processed_data, n_sigma=n_sigma)
+        trends, _, _ = PollTrend.calculate_trends(
+                processed_data, n_sigma=n_sigma
+            )
         logger.info(f'Saving trend data to {filepath}/trends.csv')
         # Save to n decimal places
         trends.to_csv(f'{filepath}/trends.csv',
