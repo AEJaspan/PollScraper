@@ -17,9 +17,22 @@ from pollscraper.scraper import DataPipeline
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.fixture
-def http_instance():
-    return DataPipeline()
+def test_pandas_test_bs4_solution(http_instance, monkeypatch,
+                                  sample_html_content, caplog,
+                                  expected_dataframe_response):
+
+    def mock_pd(*args, **kwargs):
+        class MockResponse:
+            def __init__(self, *args, **kwargs):
+                raise ValueError('Mock pd error')
+        return MockResponse()
+
+    monkeypatch.setattr(pd, 'read_html', mock_pd)
+
+    response = http_instance.parse_html_table(sample_html_content)
+    expected = 'Pandas failed to read html content with error Mock pd error'
+    assert expected in caplog.text
+    pd.testing.assert_frame_equal(response, expected_dataframe_response)
 
 
 def test_fetch_html_content_success(http_instance, monkeypatch):

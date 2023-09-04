@@ -1,6 +1,12 @@
 # content of tests/conftest.py
 import pytest
 import pandas as pd
+from pollscraper.scraper import DataPipeline
+
+
+@pytest.fixture
+def http_instance():
+    return DataPipeline()
 
 
 @pytest.fixture
