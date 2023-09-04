@@ -96,6 +96,7 @@ TODO
 .. |se| raw:: html
 
    </strike>
+
 * |ss| Separation of Concerns - separate CI and CD pipelines |se|
 * |ss| Add separate badges for each new pipeline |se|
 * |ss| Parameterize the HTTP requests via Click |se|

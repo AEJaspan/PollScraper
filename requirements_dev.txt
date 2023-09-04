@@ -24,3 +24,4 @@ numpy==1.21.6
 pandas # ==1.1.5
 urlpath==1.2.0
 lxml==4.9.3
+sphinx-click
