@@ -3,10 +3,10 @@
 
 name: Continuous Deployment Pipeline
 
-on:
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron:  '30 17 * * *'
+# on:
+#   schedule:
+#     # * is a special character in YAML so you have to quote this string
+#     - cron:  '30 17 * * *'
 
 permissions:
   contents: read
