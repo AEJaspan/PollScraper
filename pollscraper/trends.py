@@ -5,17 +5,19 @@ from pandas.api.types import is_datetime64_any_dtype as is_datetime
 from pandas.tseries.frequencies import to_offset
 from datetime import datetime
 
+NoneTypeOverload = type(None)
+
 
 def modality_factor(sample_weights, modality_col):
     map = {'Online': 0.9, 'IVR': 0.95, 'Live caller': 1.}
-    if type(modality_col) is type(None):
+    if type(modality_col) is NoneTypeOverload: # noqa E721
         return
     assert type(modality_col) is pd.Series
     sample_weights *= modality_col.map(map).fillna(1)
 
 
 def sponsor_factor(sample_weights, sponsor_col):
-    if type(sponsor_col) is type(None):
+    if type(sponsor_col) is NoneTypeOverload: # noqa E721
         return
     assert type(sponsor_col) is pd.Series
     # sample_weights*=population_col.map(map).fillna(1)
@@ -23,7 +25,7 @@ def sponsor_factor(sample_weights, sponsor_col):
 
 def population_factor(sample_weights, population_col):
     map = {'Adults': 0.9, 'RV': 0.95, 'LV': 1.}
-    if type(population_col) is type(None):
+    if type(population_col) is NoneTypeOverload: # noqa E721
         return
     assert type(population_col) is pd.Series
     sample_weights *= population_col.map(map).fillna(1)
@@ -37,14 +39,14 @@ def pollster_factor(sample_weights, pollster_col):
            'Conference Board of Dataland': 1.,
            'Dataland Register-Gazette': 1.,
            'Proudly Paid For Polling': 1., 'Electropolis Elects': 1.}
-    if type(pollster_col) is type(None):
+    if type(pollster_col) is NoneTypeOverload: # noqa E721
         return
     assert type(pollster_col) is pd.Series
     sample_weights *= pollster_col.map(map).fillna(1)
 
 
 def sample_size_factor(sample_weights, sample_col):
-    if type(sample_col) is type(None):
+    if type(sample_col) is NoneTypeOverload: # noqa E721
         return
     assert type(sample_col) is pd.Series
     avg_sample_size = sample_col.mean()
@@ -113,7 +115,7 @@ class PollTrend:
             raise ValueError('Preprocessing step has been missed. '
                              'Date column incorrectly formatted')
         poll_data = poll_data.sort_values(by='date', ascending=False)
-        if type(weights_col) is type(None):
+        if type(weights_col) is NoneTypeOverload: # noqa E721
             weights_col = 'weights'
             poll_data[weights_col] = 1.
 
