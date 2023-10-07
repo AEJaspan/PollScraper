@@ -10,7 +10,7 @@ __author__ = """Adam Jaspan"""
 __email__ = 'adam.jaspan@googlemail.com'
 
 import logging
-from root import ROOT_DIR
+from .root import ROOT_DIR
 
 # Default logging level for the package
 package_log_level = logging.DEBUG
