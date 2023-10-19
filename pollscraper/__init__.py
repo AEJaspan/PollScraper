@@ -10,6 +10,7 @@ __author__ = """Adam Jaspan"""
 __email__ = 'adam.jaspan@googlemail.com'
 
 import logging
+from pathlib import Path
 from .root import ROOT_DIR
 
 # Default logging level for the package
@@ -27,7 +28,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Create a FileHandler and set its level and format
-file_handler = logging.FileHandler(f"{ROOT_DIR}/logs/pollscraper.log")
+logs_dir = Path(f'{ROOT_DIR}/logs/')
+logs_dir.mkdir(parents=True, exist_ok=True)
+file_handler = logging.FileHandler(logs_dir / "pollscraper.log")
 file_handler.setLevel(package_log_level)
 formatter = logging.Formatter(
         logging_format

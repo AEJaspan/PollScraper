@@ -98,6 +98,7 @@ class PollTrend:
                          weights_col=None, sample_periodicity='1D',
                          rolling_average_window='7D',
                          start_date=datetime(2023, 10, 11)):
+        # WARNING - START DATE MUST BE SET TO NONE - FIX IN FUTURE
         # modality_col='', sponsor_col='', population_col=''):
         """
         Calculate poll trends based on poll data.
@@ -144,7 +145,6 @@ class PollTrend:
         trends = pd.DataFrame(index=date_range)
         outliers_avg = pd.DataFrame()
         outliers_poll = pd.DataFrame()
-
         # Calculate average on each day and calculate
         # rolling average trends for each candidate
         for candidate in candidate_cols:
