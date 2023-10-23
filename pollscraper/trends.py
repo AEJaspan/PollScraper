@@ -8,66 +8,78 @@ from datetime import datetime
 NoneTypeOverload = type(None)
 
 
-def modality_factor(sample_weights, modality_col):
-    map = {'Online': 0.9, 'IVR': 0.95, 'Live caller': 1.}
-    if type(modality_col) is NoneTypeOverload: # noqa E721
-        return
-    assert type(modality_col) is pd.Series
-    sample_weights *= modality_col.map(map).fillna(1)
+class Weighting:
 
+    def __init__(self) -> None:
+        self.modality_factor_weights = {'Online': 1.0,
+                                        'IVR': 1.0,
+                                        'Live caller': 1.}
+        self.population_factor_weights = {'Adults': 1.0,
+                                          'RV': 1.0,
+                                          'LV': 1.}
+        self.pollster_factor_weights = {
+                    'Dataland Daily': 1.,
+                    'No Province Left Behind': 1.,
+                    'Progressive Polling': 1.,
+                    'Cobolite Coalition Calling': 1.,
+                    'Big Dataland Surveys': 1.,
+                    'Synapse Strategies': 1.,
+                    'Metaflux University': 1.,
+                    'Conference Board of Dataland': 1.,
+                    'Dataland Register-Gazette': 1.,
+                    'Proudly Paid For Polling': 1.,
+                    'Electropolis Elects': 1.}
 
-def sponsor_factor(sample_weights, sponsor_col):
-    if type(sponsor_col) is NoneTypeOverload: # noqa E721
-        return
-    assert type(sponsor_col) is pd.Series
-    # sample_weights*=population_col.map(map).fillna(1)
+    def modality_factor(self, sample_weights, modality_col):
+        map = self.modality_factor_weights
+        if type(modality_col) is NoneTypeOverload: # noqa E721
+            return
+        assert type(modality_col) is pd.Series
+        sample_weights *= modality_col.map(map).fillna(1)
 
+    def sponsor_factor(self, sample_weights, sponsor_col):
+        if type(sponsor_col) is NoneTypeOverload: # noqa E721
+            return
+        assert type(sponsor_col) is pd.Series
+        # sample_weights*=population_col.map(map).fillna(1)
 
-def population_factor(sample_weights, population_col):
-    map = {'Adults': 0.9, 'RV': 0.95, 'LV': 1.}
-    if type(population_col) is NoneTypeOverload: # noqa E721
-        return
-    assert type(population_col) is pd.Series
-    sample_weights *= population_col.map(map).fillna(1)
+    def population_factor(self, sample_weights, population_col):
+        map = self.population_factor_weights
+        if type(population_col) is NoneTypeOverload: # noqa E721
+            return
+        assert type(population_col) is pd.Series
+        sample_weights *= population_col.map(map).fillna(1)
 
+    def pollster_factor(self, sample_weights, pollster_col):
+        map = self.pollster_factor_weights
+        if type(pollster_col) is NoneTypeOverload: # noqa E721
+            return
+        assert type(pollster_col) is pd.Series
+        sample_weights *= pollster_col.map(map).fillna(1)
 
-def pollster_factor(sample_weights, pollster_col):
-    map = {'Dataland Daily': 1., 'No Province Left Behind': 1.,
-           'Progressive Polling': 1.,
-           'Cobolite Coalition Calling': 1., 'Big Dataland Surveys': 1.,
-           'Synapse Strategies': 1., 'Metaflux University': 1.,
-           'Conference Board of Dataland': 1.,
-           'Dataland Register-Gazette': 1.,
-           'Proudly Paid For Polling': 1., 'Electropolis Elects': 1.}
-    if type(pollster_col) is NoneTypeOverload: # noqa E721
-        return
-    assert type(pollster_col) is pd.Series
-    sample_weights *= pollster_col.map(map).fillna(1)
+    def sample_size_factor(self, sample_weights, sample_col):
+        if type(sample_col) is NoneTypeOverload: # noqa E721
+            return
+        assert type(sample_col) is pd.Series
+        avg_sample_size = sample_col.mean()
+        sample_weights *= np.sqrt(sample_col/avg_sample_size)
 
+    def weighting_scheme_538(self, samples,
+                             sample_col=None,
+                             modality_col=None,
+                             sponsor_col=None,
+                             population_col=None,
+                             pollster_col=None):
 
-def sample_size_factor(sample_weights, sample_col):
-    if type(sample_col) is NoneTypeOverload: # noqa E721
-        return
-    assert type(sample_col) is pd.Series
-    avg_sample_size = sample_col.mean()
-    sample_weights *= np.sqrt(sample_col/avg_sample_size)
-
-
-def weighting_scheme_538(samples,
-                         sample_col=None,
-                         modality_col=None,
-                         sponsor_col=None,
-                         population_col=None,
-                         pollster_col=None):
-    # avg_sample_size = samples.mean()
-    # sample_weights = np.sqrt(samples/avg_sample_size)
-    sample_weights = pd.Series(np.full_like(samples, fill_value=1.))
-    sample_size_factor(sample_weights, sample_col)
-    modality_factor(sample_weights, modality_col)
-    sponsor_factor(sample_weights, sponsor_col)
-    population_factor(sample_weights, population_col)
-    pollster_factor(sample_weights, pollster_col)
-    return sample_weights
+        # avg_sample_size = samples.mean()
+        # sample_weights = np.sqrt(samples/avg_sample_size)
+        sample_weights = pd.Series(np.full_like(samples, fill_value=1.))
+        self.sample_size_factor(sample_weights, sample_col)
+        self.modality_factor(sample_weights, modality_col)
+        self.sponsor_factor(sample_weights, sponsor_col)
+        self.population_factor(sample_weights, population_col)
+        self.pollster_factor(sample_weights, pollster_col)
+        return sample_weights
 
 
 def wavg(group):
