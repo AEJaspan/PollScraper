@@ -40,7 +40,7 @@ jobs:
       run: |
         cp data/polls.csv downloads/
         cp data/trends.csv downloads/
-        cp logs/pollscraper.log downloads/
+        # cp logs/pollscraper.log downloads/
   
     - name: Upload Artifact GitHub Action
       uses: actions/upload-artifact@v2
